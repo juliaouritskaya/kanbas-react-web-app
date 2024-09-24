@@ -3,15 +3,18 @@ import Lab1 from "./Lab1";
 import Lab2 from "./Lab2";
 import Lab3 from "./Lab3";
 import Lab4 from "./Lab4";
+import Lab5 from "./Lab5";
+import Lab6 from "./Lab6";
 import {Route, Routes} from "react-router";
 import TOC from "./TOC";
 import {Navigate} from "react-router-dom";
 
 
+
 export default function Labs() {
     return (
         <div id="wd-labs">
-            <h1>CS 4550 - Web Development</h1>
+            <h1>CS 4550 - Web Development – 02</h1>
             <h2>Julia Ouritskaya</h2>
             <h1>Labs</h1>
             <TOC/>
@@ -21,6 +24,8 @@ export default function Labs() {
                 <Route path="Lab2" element={<Lab2/>}/>
                 <Route path="Lab3" element={<Lab3/>}/>
                 <Route path="Lab4" element={<Lab4/>}/>
+                <Route path="Lab5" element={<Lab5/>}/>
+                <Route path="Lab6" element={<Lab6/>}/>
             </Routes>
         </div>
     );
