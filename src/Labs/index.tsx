@@ -13,7 +13,7 @@ import {Navigate} from "react-router-dom";
 
 export default function Labs() {
     return (
-        <div id="wd-labs">
+        <div id="wd-labs" className="container-fluid">
             <h1>CS 4550 - Web Development – 02</h1>
             <h2>Julia Ouritskaya</h2>
             <h1>Labs</h1>
