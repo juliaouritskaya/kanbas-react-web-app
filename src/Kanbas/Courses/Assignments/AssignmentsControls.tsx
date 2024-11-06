@@ -1,21 +1,38 @@
-import { CiSearch } from "react-icons/ci";
+import {CiSearch} from "react-icons/ci";
 import {FaPlus} from "react-icons/fa6";
+import {useSelector} from "react-redux";
+import {useNavigate, useParams} from "react-router-dom";
+
 export default function AssignmentsControls() {
+    const {currentUser} = useSelector((state: any) => state.accountReducer);
+    const isFaculty = currentUser?.role === "FACULTY";
+    const navigate = useNavigate();
+    const {cid} = useParams();
+
     return (
         <div id="wd-assignments-controls" className="text-narrow">
-            {/* Add assignment button */}
-            <button id="wd-add-assignment" className="btn btn-lg btn-add-assignment me-1 float-end">
-                <FaPlus className="position-relative me-2" style={{bottom: "1px"}}/>
-                Assignment
-            </button>
+            {/* Add assignment button, visible only to faculty */}
+            {isFaculty && (
+                <button
+                    id="wd-add-assignment"
+                    className="btn btn-lg btn-add-assignment me-1 float-end"
+                    onClick={() => navigate(`/Kanbas/Courses/${cid}/Assignments/new`)} // Navigate to AssignmentEditor
+                >
+                    <FaPlus className="position-relative me-2" style={{bottom: "1px"}}/>
+                    Assignment
+                </button>
+            )}
 
-            {/* Add group button */}
-            <button
-                id="wd-add-assignment-group"
-                className="btn btn-lg btn-add-group me-1 float-end">
-                <FaPlus className="position-relative me-2" style={{bottom: "1px"}}/>
-                Group
-            </button>
+            {/* Add group button, visible only to faculty */}
+            {isFaculty && (
+                <button
+                    id="wd-add-assignment-group"
+                    className="btn btn-lg btn-add-group me-1 float-end"
+                >
+                    <FaPlus className="position-relative me-2" style={{bottom: "1px"}}/>
+                    Group
+                </button>
+            )}
 
             {/* Search input with icon */}
             <div id="wd-search-assignment" className="float-start me-3">
@@ -33,10 +50,12 @@ export default function AssignmentsControls() {
                                                 <span className="text-input-inner-wrapper">
                                                     <span className="text-input-input-layout">
                                                         <span className="text-input-inner-wrapper">
-                                                            <input className="assignment-search-input"
-                                                                   placeholder="Search..."
-                                                                   type="text"
-                                                                   id="text-input"/>
+                                                            <input
+                                                                className="assignment-search-input"
+                                                                placeholder="Search..."
+                                                                type="text"
+                                                                id="text-input"
+                                                            />
                                                         </span>
                                                     </span>
                                                 </span>

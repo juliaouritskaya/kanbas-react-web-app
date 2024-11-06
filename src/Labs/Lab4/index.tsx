@@ -1,11 +1,39 @@
 import React from "react";
+import ClickEvent from "./ClickEvent";
+import PassingFunctions from "./PassingFunctions";
+
+import PassingDataOnEvent from "./PassingDataOnEvent";
+import EventObject from "./EventObject";
+import Counter from "./Counter";
+import BooleanStateVariables from "./BooleanStateVariables";
+import StringStateVariables from "./StringStateVariables";
+import DateStateVariable from "./DateStateVariable";
+import ObjectStateVariable from "./ObjectStateVariable";
+import ArrayStateVariable from "./ArrayStateVariable";
+import ParentStateComponent from "./ParentStateComponent";
+import ReduxExamples from "./ReduxExamples";
+import CounterRedux from "./ReduxExamples/CounterRedux";
+import AddRedux from "./ReduxExamples/AddRedux";
 
 export default function Lab4() {
+    function sayHello() {
+        alert("Hello");
+    }
     return (
-        <div>
+        <div id="wd-passing-functions">
             <h2>Lab 4</h2>
-            <h3>Exercise 4.1</h3>
-            <h3>Exercise 4.2</h3>
+            <ClickEvent/>
+            <PassingDataOnEvent/>
+            <PassingFunctions theFunction={sayHello} />
+            <EventObject/>
+            <Counter/>
+            <BooleanStateVariables/>
+            <StringStateVariables/>
+            <DateStateVariable/>
+            <ObjectStateVariable/>
+            <ArrayStateVariable/>
+            <ParentStateComponent/>
+            <ReduxExamples/>
         </div>
     )
 }

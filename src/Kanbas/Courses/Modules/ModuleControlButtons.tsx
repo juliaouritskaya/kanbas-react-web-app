@@ -1,12 +1,30 @@
-import { IoEllipsisVertical } from "react-icons/io5";
+import {IoEllipsisVertical} from "react-icons/io5";
 import GreenCheckmark from "./GreenCheckmark";
 import {BsPlus} from "react-icons/bs";
-export default function ModuleControlButtons() {
+import {FaTrash} from "react-icons/fa";
+import {FaPencil} from "react-icons/fa6";
+
+export default function ModuleControlButtons(
+    {moduleId, deleteModule, editModule}: {
+        moduleId: string;
+        deleteModule?: (moduleId: string) => void;
+        editModule?: (moduleId: string) => void
+    }
+) {
     return (
         <div className="float-end">
-            <GreenCheckmark />
-            <BsPlus />
-            <IoEllipsisVertical className="fs-4" />
+            {/* Render FaPencil only if editModule function is provided */}
+            {editModule && (
+                <FaPencil onClick={() => editModule(moduleId)} className="text-primary me-3"/>
+            )}
+            {/* Render FaTrash only if deleteModule function is provided */}
+            {deleteModule && (
+                <FaTrash className="text-danger me-2 mb-1" onClick={() => deleteModule(moduleId)}/>
+            )}
+            <GreenCheckmark/>
+            <BsPlus/>
+            <IoEllipsisVertical className="fs-4"/>
         </div>
-    );}
+    );
+}
 

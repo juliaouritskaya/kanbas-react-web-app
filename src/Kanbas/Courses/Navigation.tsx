@@ -1,10 +1,9 @@
 import {Link, useParams, useLocation} from "react-router-dom";
 
 export default function CoursesNavigation() {
-    const {cid} = useParams(); // Get the current course's ID from the URL
-    const {pathname} = useLocation(); // Get the current location to determine active link
+    const {cid} = useParams();
+    const {pathname} = useLocation();
 
-    // Simplified array of link names
     const links = ["Home", "Modules", "Piazza", "Zoom", "Assignments", "Quizzes", "Grades", "People"];
 
     return (

@@ -1,6 +1,6 @@
 import GreenCheckmark from "../Modules/GreenCheckmark";
-import { BsPlus } from "react-icons/bs";
-import { IoEllipsisVertical } from "react-icons/io5";
+import {BsPlus} from "react-icons/bs";
+import {IoEllipsisVertical} from "react-icons/io5";
 
 export default function AssignmentsControlsButtons() {
     return (
@@ -10,8 +10,8 @@ export default function AssignmentsControlsButtons() {
                     <li>40% of Total</li>
                 </ul>
             </div>
-            <BsPlus className="me-3 d-inline-block" />
-            <IoEllipsisVertical className="d-inline-block" />
+            <BsPlus className="me-3 d-inline-block"/>
+            <IoEllipsisVertical className="d-inline-block"/>
         </div>
     );
 }
