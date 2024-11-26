@@ -7,9 +7,11 @@ import {IoMdArrowDropdown} from "react-icons/io";
 import {useParams} from "react-router";
 import {Link} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import React, {useState} from "react";
-import {deleteAssignment} from "./reducer";
+import React, {useState, useEffect} from "react";
+import {deleteAssignment, setAssignments} from "./reducer";
 import {FaTrash} from "react-icons/fa";
+import * as assignmentsClient from "./client";
+
 
 export default function Assignments() {
     const {cid} = useParams();
@@ -26,9 +28,10 @@ export default function Assignments() {
         setShowDeleteDialog(true);
     };
 
-    const confirmDelete = () => {
+    const confirmDelete = async () => {
         if (assignmentToDelete) {
-            dispatch(deleteAssignment(assignmentToDelete));
+            await assignmentsClient.deleteAssignment(assignmentToDelete); // Delete from server
+            dispatch(deleteAssignment(assignmentToDelete)); // Update state
             setShowDeleteDialog(false);
             setAssignmentToDelete(null);
         }
@@ -38,6 +41,16 @@ export default function Assignments() {
         setShowDeleteDialog(false);
         setAssignmentToDelete(null);
     };
+
+    const fetchAssignments = async () => {
+        if (!cid) return;
+        const fetchedAssignments = await assignmentsClient.findAssignmentsForCourse(cid);
+        dispatch(setAssignments(fetchedAssignments));
+    };
+
+    useEffect(() => {
+        fetchAssignments();
+    }, [cid]);
 
     return (
         <div>

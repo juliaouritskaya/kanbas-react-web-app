@@ -1,47 +1,84 @@
-import {FaUserCircle} from "react-icons/fa";
-import {useParams} from "react-router-dom";
-import * as db from "../../Database";
-
+import React, { useState, useEffect } from "react";
+import * as client from "./client";
+import { Link } from "react-router-dom";
+import { FaPlus } from "react-icons/fa";
 export default function PeopleTable() {
-    const {cid} = useParams();
-    const {users, enrollments} = db;
+    const [users, setUsers] = useState<any[]>([]);
+    const [role, setRole] = useState("");
+    const filterUsersByName = async (name: string) => {
+        if (name) {
+            const users = await client.findUsersByPartialName(name);
+            setUsers(users);
+        } else {
+            fetchUsers();
+        }
+    };
+    const filterUsersByRole = async (role: string) => {
+        setRole(role);
+        if (role) {
+            const users = await client.findUsersByRole(role);
+            setUsers(users);
+        } else {
+            fetchUsers();
+        }
+    };
+    const fetchUsers = async () => {
+        const users = await client.findAllUsers();
+        setUsers(users);
+    };
+    const createUser = async () => {
+        const user = await client.createUser({
+            firstName: "New",
+            lastName: `User${users.length + 1}`,
+            username: `newuser${Date.now()}`,
+            password: "password123",
+            section: "S101",
+            role: "STUDENT",
+        });
+        setUsers([...users, user]);
+    };
 
+    useEffect(() => {
+        fetchUsers();
+    }, []);
     return (
         <div id="wd-people-table">
+            <button onClick={createUser} className="float-end btn btn-danger">
+                <FaPlus className="me-2" />
+                People
+            </button>
+            <div>
+                <input onChange={(e) => filterUsersByName(e.target.value)} placeholder="Search people"
+                       className="form-control float-start w-25 me-2" />
+            </div>
+
+            <select value={role} onChange={(e) =>filterUsersByRole(e.target.value)} className="form-select float-start w-25" >
+                <option value="">All Roles</option>        <option value="STUDENT">Students</option>
+                <option value="TA">Assistants</option>     <option value="FACULTY">Faculty</option>
+            </select>
             <table className="table table-striped">
                 <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Login ID</th>
-                    <th>Section</th>
-                    <th>Role</th>
-                    <th>Last Activity</th>
-                    <th>Total Activity</th>
+                    <th>Name</th><th>Login ID</th><th>Section</th><th>Role</th><th>Last Activity</th><th>Total Activity</th>
                 </tr>
                 </thead>
                 <tbody>
-                {users
-                    .filter((user) =>
-                        enrollments.some(
-                            (enrollment) => enrollment.user === user._id && enrollment.course === cid
-                        )
-                    )
-                    .map((user: any) => (
-                        <tr key={user._id}>
-                            <td className="wd-full-name text-nowrap">
-                                <FaUserCircle className="me-2 fs-1 text-secondary"/>
-                                <span className="wd-first-name">{user.firstName}</span>{" "}
-                                <span className="wd-last-name">{user.lastName}</span>
-                            </td>
-                            <td className="wd-login-id">{user.loginId}</td>
-                            <td className="wd-section">{user.section}</td>
-                            <td className="wd-role">{user.role}</td>
-                            <td className="wd-last-activity">{user.lastActivity}</td>
-                            <td className="wd-total-activity">{user.totalActivity}</td>
-                        </tr>
-                    ))}
+                {users.map((user: any) => (
+                    <tr key={user._id}>
+                        <td className="text-nowrap">
+                            <Link to={`/Kanbas/Courses/1234/People/${user._id}`}>
+                                {user.firstName} {user.lastName}
+                            </Link>
+                        </td>
+                        <td>{user.loginId}</td>
+                        <td>{user.section}</td>
+                        <td>{user.role}</td>
+                        <td>{user.lastActivity}</td>
+                        <td>{user.totalActivity}</td>
+                    </tr>
+                ))}
                 </tbody>
             </table>
-        </div>);
+        </div>
+    );
 }
-

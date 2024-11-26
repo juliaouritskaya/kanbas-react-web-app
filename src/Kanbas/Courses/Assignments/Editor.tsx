@@ -1,7 +1,9 @@
 import {Link, Navigate, useNavigate, useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
 import {useSelector, useDispatch} from "react-redux";
-import {addAssignment, editAssignment, updateAssignment} from "./reducer";
+import {addAssignment, updateAssignment} from "./reducer";
+import * as assignmentsClient from "./client";
+
 
 export default function AssignmentEditor() {
     const {cid, aid} = useParams(); // Course ID from URL
@@ -12,8 +14,7 @@ export default function AssignmentEditor() {
 
     const existingAssignment = assignments.find((a: any) => a._id === aid);
 
-    {/* Local state for form inputs */
-    }
+    {/* Local state for form inputs */}
     const [assignment, setAssignment] = useState({
         title: existingAssignment?.title || "",
         description: existingAssignment?.description || "",
@@ -32,11 +33,16 @@ export default function AssignmentEditor() {
         }
     }, [aid]);
 
-    const handleSave = () => {
+    const handleSave = async () => {
         if (existingAssignment) {
-            dispatch(updateAssignment({...assignment, _id: aid}));
+            const updatedAssignment = await assignmentsClient.updateAssignment({
+                ...assignment,
+                _id: aid,
+            }); // Persist to server
+            dispatch(updateAssignment(updatedAssignment)); // Update state
         } else {
-            dispatch(addAssignment(assignment));
+            const newAssignment = await assignmentsClient.createAssignment(cid!, assignment); // Persist to server
+            dispatch(addAssignment(newAssignment)); // Add to state
         }
         navigate(`/Kanbas/Courses/${cid}/Assignments`);
     };
