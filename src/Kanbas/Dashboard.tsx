@@ -1,68 +1,111 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { useSelector } from "react-redux";
+import {Link} from 'react-router-dom';
+import {useSelector} from "react-redux";
 
-interface DashboardProps {
+export default function Dashboard({
+                                      courses,
+                                      course,
+                                      setCourse,
+                                      addNewCourse,
+                                      deleteCourse,
+                                      updateCourse,
+                                      enrolling,
+                                      setEnrolling,
+                                      updateEnrollment,
+                                  }: {
     courses: any[];
     course: any;
     setCourse: (course: any) => void;
     addNewCourse: () => void;
-    deleteCourse: (courseId: any) => void;
+    deleteCourse: (course: any) => void;
     updateCourse: () => void;
-}
-
-const Dashboard: React.FC<DashboardProps> = ({
-                                                 courses,
-                                                 course,
-                                                 setCourse,
-                                                 addNewCourse,
-                                                 deleteCourse,
-                                                 updateCourse
-                                             }) => {
+    enrolling: boolean;
+    setEnrolling: (enrolling: boolean) => void;
+    updateEnrollment: (course: string, enrolled: boolean) => void;
+}) {
     const { currentUser } = useSelector((state: any) => state.accountReducer);
-    const isFaculty = currentUser?.role === "FACULTY";
+    const isFaculty = currentUser?.role === "FACULTY" || "ADMIN";
 
     return (
         <div id="wd-dashboard">
             <h1 id="wd-dashboard-title">Dashboard</h1>
-            <hr />
+            <hr/>
+            <button onClick={() => setEnrolling(!enrolling)} className="float-end btn btn-primary">
+                {enrolling ? "My Courses" : "All Courses"}
+            </button>
+            <br/>
+            <br/>
             {isFaculty && (
                 <>
                     <h5>New Course
-                        <button className="btn btn-primary float-end"
-                                id="wd-add-new-course-click"
-                                onClick={addNewCourse}>Add</button>
-                        <button className="btn btn-warning float-end me-2"
-                                onClick={updateCourse} id="wd-update-course-click">Update</button>
+                        <button
+                            className="btn btn-primary float-end"
+                            id="wd-add-new-course-click"
+                            onClick={addNewCourse}
+                        >
+                            Add
+                        </button>
+                        <button
+                            className="btn btn-warning float-end me-2"
+                            onClick={() => {
+                                console.log("Updating course:", course);
+                                updateCourse();
+                            }}
+                            id="wd-update-course-click"
+                        >
+                            Update
+                        </button>
                     </h5>
-                    <br />
-                    <input value={course.name} className="form-control mb-2"
-                           onChange={(e) => setCourse({ ...course, name: e.target.value })} />
-                    <textarea value={course.description} className="form-control"
-                              onChange={(e) => setCourse({ ...course, description: e.target.value })} />
-                    <hr />
+                    <br/>
+                    <input
+                        value={course.name || ""}
+                        className="form-control mb-2"
+                        onChange={(e) => setCourse({...course, name: e.target.value})}
+                    />
+                    <textarea
+                        value={course.description || ""}
+                        className="form-control"
+                        onChange={(e) => setCourse({...course, description: e.target.value})}
+                    />
+                    <hr/>
                 </>
             )}
             <h2 id="wd-dashboard-published">Published Courses ({courses.length})</h2>
-            <hr />
+            <hr/>
             <div className="row row-cols-1 row-cols-md-5 g-4">
-                {courses.map((course) => (
-                    <div key={course._id} className="wd-dashboard-course col" style={{ width: "300px" }}>
+                {courses
+                    .filter((course) => course && typeof course === "object")
+                    .map((course) => (
+                    <div key={course._id} className="wd-dashboard-course col"
+                         style={{width: "300px"}}>
                         <div className="card rounded-3 overflow-hidden">
-                            <img src={course.image} width="100%" height={160}/>
+                            <img src={course.image || "/images/reactjs.webp"} width="100%" height={160}/>
                             <div className="card-body">
-                                <h5 className="wd-dashboard-course-title card-title">{course.name}</h5>
+                                <h5 className="wd-dashboard-course-title card-title">
+                                    {enrolling && (
+                                        <button onClick={(event) => {
+                                            event.preventDefault();
+                                            updateEnrollment(course._id, !course.enrolled);
+                                        }}
+                                            className={`btn ${ course.enrolled ? "btn-danger" : "btn-success" } float-end`} >
+                                            {course.enrolled ? "Unenroll" : "Enroll"}
+                                        </button>
+                                    )}
+                                    {course.name}
+                                </h5>
                                 <p className="wd-dashboard-course-title card-text overflow-y-hidden"
                                    style={{maxHeight: 100}}>
                                     {course.description}
                                 </p>
 
-                                <Link to={`/Kanbas/Courses/${course._id}/Home`} className="btn btn-primary">Go</Link>
+                                <Link to={`/Kanbas/Courses/${course._id}/Home`}
+                                      className="btn btn-primary">Go</Link>
                                 {isFaculty && (
                                     <>
                                         <button
                                             onClick={(event) => {
                                                 event.preventDefault();
+                                                console.log("Deleting course:", course);
                                                 deleteCourse(course._id);
                                             }}
                                             className="btn btn-danger float-end"
@@ -74,6 +117,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                                             id="wd-edit-course-click"
                                             onClick={(event) => {
                                                 event.preventDefault();
+                                                console.log("Editing course:", course);
                                                 setCourse(course);
                                             }}
                                             className="btn btn-warning me-2 float-end"
@@ -91,4 +135,3 @@ const Dashboard: React.FC<DashboardProps> = ({
     );
 };
 
-export default Dashboard;

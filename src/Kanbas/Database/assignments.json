@@ -1,38 +1,56 @@
 [
   {
     "title": "Propulsion Assignment",
-    "course": "RS101"
+    "course": {
+      "$oid": "67520ea591979a9c6372f2db"
+    }
   },
   {
     "title": "Combustion Analysis",
-    "course": "RS101"
+    "course": {
+      "$oid": "67520ea591979a9c6372f2db"
+    }
   },
   {
     "title": "Nozzle Design Project",
-    "course": "RS101"
+    "course": {
+      "$oid": "67520ea591979a9c6372f2db"
+    }
   },
   {
     "title": "Aerodynamics Quiz",
-    "course": "RS102"
+    "course": {
+      "$oid": "67520ea591979a9c6372f2dc"
+    }
   },
   {
     "title": "Flow Analysis",
-    "course": "RS102"
+    "course": {
+      "$oid": "67520ea591979a9c6372f2dc"
+    }
   },
   {
     "title": "Heating Analysis",
-    "course": "RS102"
+    "course": {
+      "$oid": "67520ea591979a9c6372f2dc"
+    }
   },
   {
     "title": "Structural Design Task",
-    "course": "RS103"
+    "course": {
+      "$oid": "67520ea591979a9c6372f2dd"
+    }
   },
   {
     "title": "Orbital Calculations",
-    "course": "RS103"
+    "course": {
+      "$oid": "67520ea591979a9c6372f2dd"
+    }
   },
   {
     "title": "Systems Engineering Exam",
-    "course": "RS103"
+    "course": {
+      "$oid": "67520ea591979a9c6372f2dd"
+    }
   }
 ]

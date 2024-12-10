@@ -3,18 +3,52 @@ import * as client from "./client";
 import { Link } from "react-router-dom";
 import {FaPlus, FaUserCircle} from "react-icons/fa";
 import PeopleDetails from "./Details";
-export default function PeopleTable({ users = [] }: { users?: any[] }) {
+import * as courseClient from "../client";
+
+export default function PeopleTable({
+                                        users,
+                                        courseId,
+                                    }: {
+    users?: any[];
+    courseId?: string;
+}) {
+    const [enrolledUsers, setEnrolledUsers] = useState<any[]>([]);
+
+    useEffect(() => {
+        const fetchUsersForCourse = async () => {
+            try {
+                if (courseId) {
+                    const enrolled = await courseClient.findUsersForCourse(courseId);
+                    setEnrolledUsers(enrolled);
+                }
+            } catch (error) {
+                console.error("Failed to fetch users:", error);
+            }
+        };
+
+        if (courseId) {
+            fetchUsersForCourse();
+        }
+    }, [courseId]);
+
+    const displayUsers = courseId ? enrolledUsers : users;
+
     return (
         <div id="wd-people-table">
             <PeopleDetails/>
             <table className="table table-striped">
                 <thead>
                 <tr>
-                    <th>Name</th><th>Login ID</th><th>Section</th><th>Role</th><th>Last Activity</th><th>Total Activity</th>
+                    <th>Name</th>
+                    <th>Login ID</th>
+                    <th>Section</th>
+                    <th>Role</th>
+                    <th>Last Activity</th>
+                    <th>Total Activity</th>
                 </tr>
                 </thead>
                 <tbody>
-                {users.map((user) => (
+                {displayUsers?.map((user) => (
                     <tr key={user._id}>
                         <td className="wd-full-name text-nowrap">
                             <Link to={`/Kanbas/Account/Users/${user._id}`} className="text-decoration-none">

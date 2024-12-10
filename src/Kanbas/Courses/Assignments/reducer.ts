@@ -1,5 +1,4 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {assignments} from "../../Database";
 
 interface Assignment {
     _id: string;
